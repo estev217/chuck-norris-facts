@@ -21,7 +21,10 @@
       <h1 class="title">Chuck Norris Jokes</h1>
       <p>Reload for another joke!</p>
 
-      <div class="content" id="chuck-norris">
+      <div class="content" id="chuck">
+      </div>
+      <div>
+      <button id="reload">Reload</button>
       </div>
     </div>
 
@@ -30,7 +33,27 @@
   <!-- We need to load axios first! -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js" integrity="sha256-S1J4GVHHDMiirir9qsXWc8ZWw74PHHafpsHp5PXtjTs=" crossorigin="anonymous"></script>
   <script>
+    function fetchChuckJSON() {
+      const url = `https://api.chucknorris.io/jokes/random/`;
+      axios.get(url)
+              .then(function(response) {
+                return response.data; // SUBTLE difference with Fetch: response.data instead of response.json()
+              })
+              .then(function(chuck) {
+                console.log('data decoded from JSON:', chuck);
 
+                // Build a block of HTML
+                const chuckHtml = `
+        <p><strong>${chuck.value}</strong></p>
+        <img src="${chuck.icon_url}" />
+      `;
+                document.querySelector('#chuck').innerHTML = chuckHtml;
+              });
+    }
+
+    fetchChuckJSON();
+
+    document.getElementById('reload').addEventListener('click', fetchChuckJSON);
   </script>
 </body>
 
